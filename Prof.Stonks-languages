@@ -65,7 +65,7 @@ if(msg=="review"):
 			short_review=short_review-1
 			
 		else:
-			'''
+		    '''
 		    If you write the wrong answer it will print the right answer.
 		    '''
 			print(orig_words[0])

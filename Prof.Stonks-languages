@@ -1,0 +1,183 @@
+###################Prof.Stonks-languages###################
+'''
+---How to use?---
+Choose the mode:
+1) Review
+You will review which words you know.
+Stonks will write a word and you will need to say its meaning!
+
+2) Teaching
+You will teach the Stonks what you have learned.
+Write new words and then say what they mean!
+
+3) Settings
+You will be able to see all your files and progress.
+
+---Notes:---
+-You need to create two files "translation" and "original"
+
+-In the files the structure will be: "word/#/end"
+we did this because if we just read a word in a text, we would have "word \n"; when you print it, it will break the line.
+
+I think it's easier to just work with words, so the files will have this structure because we can
+use the split function with "/ # /" and we will have a list with two words: "word" and "end \n"
+'''
+############################################################
+
+import random
+print("Hello man! I'm Stonks and I will help you!")
+msg=input("Choose the mode:'review'/'teach'/'settings'\n")
+
+
+#1)To review:
+
+#We define a variable that will help us to repeat the last words we learn:
+short_review=10
+
+if(msg=="review"):
+	
+	#1.1)Printing the last ten words:
+	while(short_review>0):
+		#Opening files where are the words:
+		trans_file=open("translation.txt","r")
+		orig_file=open("original.txt","r")
+
+		#We create two lists with all lines in the files:
+		trans_list=trans_file.readlines()
+		orig_list=orig_file.readlines()
+		
+		#For the same line in the files we create lists for save the words (one for the translation and other for the original): 
+		trans_words=trans_list[len(orig_list)-short_review].split('/#/')
+		orig_words=orig_list[len(orig_list)-short_review].split('/#/')
+
+		'''
+		How it was explained, the structure of all lines will be: "word/#/end", so when we split this the new list we will have two words("word" and "end\n"), 
+		so the first is our word.
+		'''
+		print(trans_words[0])
+
+		#Reding the answer:
+		msg=input()
+		
+		#If your answer is correct: 
+		if(msg==orig_words[0]):
+			print("correct!")
+			short_review=short_review-1
+			
+		else:
+			'''
+		    If you write the wrong answer it will print the right answer.
+		    '''
+			print(orig_words[0])
+		
+
+		print("-----------------------------------")
+
+		#Closing the file:
+		orig_file.close()
+
+
+	#1.2)Priting any word:
+
+	#This loop is like the other, but the "" values is defined using a random command and review everything!
+	orig_file=open("original.txt","r")
+	orig_list=orig_file.readlines()
+
+	#Here we defined the first number for print the first word:
+	kr=random.randrange(0,len(trans_list)-1)
+
+	while(True):	
+		trans_words=trans_list[kr].split('/#/')
+		orig_words=orig_list[kr].split('/#/')
+		
+		print(trans_words[0])
+		msg=input()
+		
+		#If your answer is correct we will print "correct!" and we will choose another word.
+		if(msg==orig_words[0]):
+			print("correct!")
+			kr=random.randrange(0,len(trans_list)-1)
+		else:
+			#If your answer is wrong we will print the correct answer.
+			print(orig_words[0])
+
+		orig_file.close()
+		print("-----------------------------------")	
+
+###################################################################################
+
+#2)To teach:
+
+if(msg=='teach'):
+	while(True):
+		#Reding the word:
+		msg=input("")
+
+		#We define a variable to help us know if you already explained for stonks the meaning of some word:
+		x=-1
+
+		trans_file = open("translation.txt","r")
+		trans_list=trans_file.readlines()
+		
+		'''
+		Then Stonks will read every single word on the list. If you already taught stonks this word it means that the new value of "x"  will be this position in the list, else its value will still the same (-1).
+		'''
+		for n in range(0,len(trans_list)):
+			trans_words=trans_list[n].split("/#/")
+			for k in range(0,len(trans_words)-1):
+				if(trans_words[k]==msg):
+					x=n
+					break
+		trans_file.close()
+		
+		#If x==1 is equal to "we don't know this word yet", look the last commentary.
+		if(x==-1):
+			msg2=input("What "+msg+" means?\n")
+			'''
+			If you wrote the new word wrong is important that you can delet it, so if after this you write "del" nothing will hapen to the files.
+			'''
+			if(msg2!="del"):
+				transw=open("translation.txt","a")
+				transw.write(msg+"/#/end\n")
+				transw.close()
+				origw=open("original.txt","a")
+				origw.write(msg2+"/#/end\n")
+				origw.close()
+
+		else:
+			'''
+			If x!=1 is equal to "We know this word", look the last comment, 
+			so we need explain this for who is using the code. The next lines print the word if it's known.
+			'''
+			orig_file=open("original.txt","r")
+			orig_list=orig_file.readlines()
+			orig_words=orig_list[x].split("/#/")	
+			
+			print(orig_words[0])
+			orig_file.close()
+			
+
+		print("-----------------------------------")
+
+###################################################################################
+
+#3)Settings:
+
+if(msg=='settings'):
+	#Same process to the firts topic: reding and creating a lists with the words
+	orig_file=open("original.txt","r")
+	trans_file=open("translation.txt","r")
+	orig_list=orig_file.readlines()
+	trans_list=trans_file.readlines()
+	
+	#Number of words:
+	print("N=",end="")
+	print(len(orig_list))
+	
+	#Printing the lists:
+	for n in range(0,len(orig_list)-1):
+		trans_words=trans_list[n].split("/#/")
+		orig_words=orig_list[n].split("/#/")
+		print(trans_words[0]+"-"+orig_words[0])
+
+	orig_file.close()
